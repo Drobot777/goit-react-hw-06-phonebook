@@ -1,7 +1,11 @@
 import css from './Phonebook.module.css';
-import PropTypes from 'prop-types';
+import {nanoid} from 'nanoid';
+import {useDispatch, useSelector} from 'react-redux';
+import {addPhone, selectContactsDetails} from 'redux/reducer';
 
-export const Phonebook = ({toggle}) => {
+export const Phonebook = () => {
+  const contacts = useSelector (selectContactsDetails);
+  const dispath = useDispatch ();
   const handleChange = evt => {
     evt.preventDefault ();
     const form = evt.currentTarget;
@@ -11,6 +15,22 @@ export const Phonebook = ({toggle}) => {
     form.reset ();
   };
 
+  const toggle = (name, tel) => {
+    let masName = [];
+    contacts.forEach (date => {
+      return masName.push (date.name);
+    });
+    if (masName.includes (name)) {
+      return alert ('Rosie Simpson is already in contacts');
+    }
+    return dispath (
+      addPhone ({
+        name: name,
+        id: nanoid (),
+        tel: tel,
+      })
+    );
+  };
   return (
     <div>
       <form onSubmit={handleChange} className={css.form}>
@@ -40,8 +60,4 @@ export const Phonebook = ({toggle}) => {
       </form>
     </div>
   );
-};
-
-Phonebook.ropTypes = {
-  toggle: PropTypes.func.isRequired,
 };

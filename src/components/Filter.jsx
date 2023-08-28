@@ -1,14 +1,18 @@
 import {useState} from 'react';
 import css from './Filter.module.css';
-import PropTypes from 'prop-types';
-export const Filter = ({changeFilter}) => {
-  const [inputValue, setInputValue] = useState ('');
+import {setFilter} from 'redux/reducer';
+import {useDispatch} from 'react-redux';
 
+export const Filter = () => {
+  const [inputValue, setInputValue] = useState ('');
+  const dispath = useDispatch ();
   const handleChange = evt => {
     changeFilter (evt.target.value);
     setInputValue (evt.target.value);
   };
-
+  const changeFilter = value => {
+    dispath (setFilter (value));
+  };
   return (
     <div>
       <label className={css.label}>
@@ -23,8 +27,4 @@ export const Filter = ({changeFilter}) => {
       </label>
     </div>
   );
-};
-
-Filter.propTypes = {
-  changeFilter: PropTypes.func.isRequired,
 };

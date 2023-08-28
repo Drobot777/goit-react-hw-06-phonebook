@@ -1,10 +1,22 @@
 import css from './Contacts.module.css';
-import PropTypes from 'prop-types';
-export const Contacts = ({deleteContact, valueFilter, allContacts}) => {
+import {useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux/es/hooks/useSelector';
+import {
+  selectContactsDetails,
+  deletePhone,
+  selectFilterDetails,
+} from 'redux/reducer';
+
+export const Contacts = () => {
+  const contacts = useSelector (selectContactsDetails);
+  const valueFilter = useSelector (selectFilterDetails);
+  const dispath = useDispatch ();
+
   const deleteContacts = e => {
     let idToDelete = e.currentTarget.id;
-    deleteContact (idToDelete);
+    dispath (deletePhone (idToDelete));
   };
+
   const filterItems = ary => {
     let arryContacts = ary.filter (el => {
       return el.name.toLowerCase ().indexOf (valueFilter.toLowerCase ()) > -1;
@@ -51,13 +63,7 @@ export const Contacts = ({deleteContact, valueFilter, allContacts}) => {
 
   return (
     <u className={css.item}>
-      {renderContacts (allContacts)}
+      {renderContacts (contacts)}
     </u>
   );
-};
-
-Contacts.propTypes = {
-  allContacts: PropTypes.array.isRequired,
-  valueFilter: PropTypes.string.isRequired,
-  deleteContact: PropTypes.func.isRequired,
 };
